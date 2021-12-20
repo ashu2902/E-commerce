@@ -98,6 +98,7 @@ class _UserFormState extends State<UserForm> {
                       },
                       label: "Enter address"),
                 ]),
+                //submit button
                 Align(
                   alignment: Alignment.center,
                   child: SubmitButton(

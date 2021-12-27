@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:task_app/source_code/Screens/cart_screen.dart';
 import 'package:task_app/source_code/Services/auth_service.dart';
 import 'package:task_app/source_code/controllers/cart_controller.dart';
 import 'package:task_app/source_code/widgets/cart_icon.dart';

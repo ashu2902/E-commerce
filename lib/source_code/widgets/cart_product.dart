@@ -16,43 +16,47 @@ class CartProducts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => SizedBox(
-        height: 600,
-        child: Scaffold(
-          body: ListView.builder(
-              itemCount: controller.products.length,
-              itemBuilder: (BuildContext context, int index) {
-                ProductsModel items = controller.products.keys.toList()[index];
-                // ProductsModel cost = controller.products.values.toList()[index];
-                checkoutProducts.add(items.title);
-                totalCost.add(items.price);
-                ids.add(items.id);
+    return controller.products.length == 0
+        ? Text('No products added to the cart')
+        : Obx(
+            () => SizedBox(
+              height: 600,
+              child: Scaffold(
+                body: ListView.builder(
+                    itemCount: controller.products.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      ProductsModel items =
+                          controller.products.keys.toList()[index];
+                      // ProductsModel cost = controller.products.values.toList()[index];
+                      checkoutProducts.add(items.title);
+                      totalCost.add(items.price);
+                      ids.add(items.id);
 
-                return CartProductCard(
-                  controller: controller,
-                  product: controller.products.keys.toList()[index],
-                  qty: controller.products.values.toList()[index],
-                  index: index,
-                );
-              }),
-          floatingActionButton: ElevatedButton(
-            onPressed: () async {
-              print("items to checkout : $checkoutProducts $totalCost ");
+                      return CartProductCard(
+                        controller: controller,
+                        product: controller.products.keys.toList()[index],
+                        qty: controller.products.values.toList()[index],
+                        index: index,
+                      );
+                    }),
+                floatingActionButton: ElevatedButton(
+                  onPressed: () async {
+                    print("items to checkout : $checkoutProducts $totalCost ");
 
-              var uid = FirebaseAuth.instance.currentUser!.uid.toString();
-              final CollectionReference checkout =
-                  FirebaseFirestore.instance.collection('users/$uid/checkout');
-              checkout.add({'items': checkoutProducts, 'prod_id': ids});
+                    var uid = FirebaseAuth.instance.currentUser!.uid.toString();
+                    final CollectionReference checkout = FirebaseFirestore
+                        .instance
+                        .collection('users/$uid/checkout');
+                    checkout.add({'items': checkoutProducts, 'prod_id': ids});
 
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => UserForm()));
-            },
-            child: Text('Checkout'),
-          ),
-        ),
-      ),
-    );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => UserForm()));
+                  },
+                  child: Text('Checkout'),
+                ),
+              ),
+            ),
+          );
   }
 }
 

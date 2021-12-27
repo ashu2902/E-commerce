@@ -1,4 +1,4 @@
-#Mon Dec 20 16:23:42 IST 2021
+#Tue Dec 28 04:09:41 IST 2021
 base.0=C\:\\Users\\sharm\\Desktop\\api_flutter\\RestApiFlutter\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

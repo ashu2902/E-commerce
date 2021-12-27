@@ -17,10 +17,10 @@ class _FormWidgetState extends State<FormWidget> {
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
-  var _name = '';
-  var _mobile = '';
-  var _email = '';
-  var _address = '';
+  var _name;
+  var _mobile;
+  var _email;
+  var _address;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,32 +40,28 @@ class _FormWidgetState extends State<FormWidget> {
                     },
                     controller: _nameController,
                     validator: (value) {
-                      if (value) {
-                        return null;
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
                       }
-                      return "please enter Something";
+                      return null;
                     },
                     label: "Name"),
-                Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0),
-                      child: FormFieldDesign(
-                          onSaved: () {
-                            setState(() {
-                              _mobile = _mobileController.text.toString();
-                            });
-                          },
-                          controller: _mobileController,
-                          validator: (value) {
-                            if (value) {
-                              return null;
-                            }
-                            return "please enter Something";
-                          },
-                          label: "Mobile no"),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 0),
+                  child: FormFieldDesign(
+                      onSaved: () {
+                        setState(() {
+                          _mobile = _mobileController.text.toString();
+                        });
+                      },
+                      controller: _mobileController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      label: "Mobile no"),
                 ),
                 FormFieldDesign(
                     onSaved: () {
@@ -75,65 +71,68 @@ class _FormWidgetState extends State<FormWidget> {
                     },
                     controller: _emailController,
                     validator: (value) {
-                      if (value) {
-                        return null;
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
                       }
-                      return "please enter Something";
+                      return null;
                     },
                     label: "Email"),
-                Stack(children: [
-                  FormFieldDesign(
-                      onSaved: () {
-                        setState(() {
-                          _address = _addressController.text.toString();
-                        });
-                      },
-                      controller: _addressController,
-                      validator: (value) {
-                        if (value) {
-                          return null;
-                        }
-                        return "please enter Something";
-                      },
-                      label: "Enter address"),
-                ]),
+                FormFieldDesign(
+                    onSaved: () {
+                      setState(() {
+                        _address = _addressController.text.toString();
+                      });
+                    },
+                    controller: _addressController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Required";
+                      } else {
+                        return null;
+                      }
+                    },
+                    label: "Enter address"),
                 //submit button
                 Align(
                   alignment: Alignment.center,
                   child: SubmitButton(
-                    onPressed: () async {
-                      _name = _nameController.text;
-                      _email = _emailController.text;
-                      _mobile = _mobileController.text;
-                      _address = _addressController.text;
+                    onPressed: () {
+                      validate();
+                      if (validate() == true) {
+                        print('wuhooo');
+                        _name = _nameController.text;
+                        _email = _emailController.text;
+                        _mobile = _mobileController.text;
+                        _address = _addressController.text;
 
-                      print(_name + _email + _mobile + _address);
-                      var uid =
-                          FirebaseAuth.instance.currentUser!.uid.toString();
-                      final CollectionReference user_info = FirebaseFirestore
-                          .instance
-                          .collection('users/$uid/info');
-                      user_info.add({
-                        "name": _name,
-                        "mob": _mobile,
-                        "email": _email,
-                        "address": _address
-                      }).then((_) => _formKey.currentState!.reset());
+                        print(_name + _email + _mobile + _address);
+                        var uid =
+                            FirebaseAuth.instance.currentUser!.uid.toString();
+                        final CollectionReference user_info = FirebaseFirestore
+                            .instance
+                            .collection('users/$uid/info');
+                        user_info.add({
+                          "name": _name,
+                          "mob": _mobile,
+                          "email": _email,
+                          "address": _address
+                        }).then((_) => _formKey.currentState!.reset());
 
-                      showDialog(
-                          context: context,
-                          builder: (context) => Dialog(
-                                child: Container(
-                                    height: 60,
-                                    width: 60,
-                                    child:
-                                        Center(child: Text('Order submitted'))),
-                              ));
-                      _nameController.clear();
-                      _mobileController.clear();
-                      _emailController.clear();
-                      _addressController.clear();
-                      Navigator.pop(context);
+                        showDialog(
+                            context: context,
+                            builder: (context) => Dialog(
+                                  child: Container(
+                                      height: 60,
+                                      width: 60,
+                                      child: Center(
+                                          child: Text('Order submitted'))),
+                                ));
+                        _nameController.clear();
+                        _mobileController.clear();
+                        _emailController.clear();
+                        _addressController.clear();
+                        Navigator.pop(context);
+                      }
                     },
                     sidePadding: 60.0,
                     text: "Accept & Continue",
@@ -145,5 +144,15 @@ class _FormWidgetState extends State<FormWidget> {
         ),
       ),
     );
+  }
+
+  validate() {
+    if (_formKey.currentState!.validate()) {
+      print('validated');
+      return true;
+    } else {
+      print('not validated');
+      return false;
+    }
   }
 }

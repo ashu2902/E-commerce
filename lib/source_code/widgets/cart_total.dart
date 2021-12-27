@@ -9,6 +9,7 @@ class CartTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('sub total ${controller.productSubTotal.length}');
     return Obx(
       () => Container(
         child: Row(
@@ -18,10 +19,9 @@ class CartTotal extends StatelessWidget {
               'Total',
               style: TextStyle(fontSize: 24),
             ),
-            Text(
-              '${controller.total}',
-              style: TextStyle(fontSize: 24),
-            ),
+            controller.productSubTotal.length == 0
+                ? Text('nil')
+                : Text(controller.total)
           ],
         ),
       ),

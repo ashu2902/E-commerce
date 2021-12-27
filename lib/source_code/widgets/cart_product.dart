@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:task_app/source_code/Models/products.dart';
 import 'package:task_app/source_code/Screens/form.dart';
 import 'package:task_app/source_code/controllers/cart_controller.dart';
+import 'package:task_app/source_code/widgets/product_title.dart';
 
 class CartProducts extends StatelessWidget {
   final CartController controller = Get.find();
@@ -71,16 +72,19 @@ class CartProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: Container(
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CircleAvatar(
-              radius: 40,
+              radius: 51,
               backgroundImage: NetworkImage(product.image!),
             ),
-            Expanded(child: Text(product.title!)),
+            Expanded(child: ProductTitle(product)
+                // Text(product.title!,)
+                ),
             IconButton(
                 onPressed: () {
                   controller.removeProduct(product);

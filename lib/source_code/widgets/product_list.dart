@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:task_app/source_code/controllers/cart_controller.dart';
 import 'package:task_app/source_code/controllers/product_controller.dart';
+import 'package:task_app/source_code/widgets/add_to_cart_button.dart';
 import 'package:task_app/source_code/widgets/product_tile.dart';
 
 class ProductList extends StatefulWidget {
@@ -20,12 +21,12 @@ class _ProductListState extends State<ProductList> {
 
   int currentPage = 1;
   List listProducts = [];
-  int count = 2;
+  int? count;
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    fetchProductCount();
+    loadMoreProducts();
   }
 
   @override
@@ -33,55 +34,46 @@ class _ProductListState extends State<ProductList> {
     return Obx(
       () => Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    "Shop here",
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
-                  ),
-                ),
-              ],
+          Expanded(
+            child: StaggeredGridView.countBuilder(
+              controller: _scrollController,
+              crossAxisCount: 2,
+              itemCount: productController.productList.length,
+              mainAxisSpacing: 20,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    ProductTile(productController.productList[index], index),
+                    // AddToCartButton(index: index)
+                  ],
+                );
+              },
+              staggeredTileBuilder: (index) => StaggeredTile.fit(1),
             ),
           ),
-          Expanded(
-              child:
-
-                  // if (productController.isLoading.value) {
-                  //   return Center(child: CircularProgressIndicator());
-                  // } else
-                  StaggeredGridView.countBuilder(
-            controller: _scrollController,
-            crossAxisCount: 1,
-            itemCount: productController.productList.length,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            itemBuilder: (context, index) {
-              return
-                  // Row(children: [
-                  Container(
-                      child: Column(
-                children: [
-                  ProductTile(productController.productList[index]),
-                  IconButton(
-                      onPressed: () {
-                        print(productController.productList[index].toString());
-                        cartController
-                            .addProduct(productController.productList[index]);
-                      },
-                      icon: Icon(Icons.add_box_rounded)),
-                ],
-              ));
-            },
-            staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-          )),
           productController.isLoading == true
               ? CircularProgressIndicator()
               : Container()
         ],
       ),
     );
+  }
+
+  fetchProductCount() {
+    setState(() {
+      count = productController.productList.length;
+    });
+  }
+
+  loadMoreProducts() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        setState(() {
+          count = count! + 5;
+        });
+        productController.fetchProducts(count);
+      }
+    });
   }
 }

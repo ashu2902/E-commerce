@@ -27,6 +27,8 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     List items = controller.products.values.toList();
+    int count = items.length;
+    print('ye hai count $count');
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -49,7 +51,6 @@ class _HomePageViewState extends State<HomePageView> {
                     },
                     icon: const Icon(Icons.shopping_cart),
                   ),
-                  //this icon will tell the number of products added.
                   Text('${controller.products.values.toList().length}')
                 ]),
               ),

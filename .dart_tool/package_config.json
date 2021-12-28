@@ -225,13 +225,13 @@
     },
     {
       "name": "google_sign_in",
-      "rootUri": "file:///C:/FLutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-5.0.5",
+      "rootUri": "file:///C:/FLutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-5.2.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.14"
     },
     {
       "name": "google_sign_in_platform_interface",
-      "rootUri": "file:///C:/FLutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_platform_interface-2.0.1",
+      "rootUri": "file:///C:/FLutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_platform_interface-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -488,7 +488,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-12-20T10:52:17.941799Z",
+  "generated": "2021-12-28T05:12:33.524871Z",
   "generator": "pub",
   "generatorVersion": "2.14.2"
 }

@@ -8,7 +8,7 @@ import 'package:task_app/source_code/controllers/cart_controller.dart';
 import 'package:task_app/source_code/widgets/product_title.dart';
 
 class CartProducts extends StatelessWidget {
-  final CartController controller = Get.find();
+  final CartController controller = Get.put(CartController());
   CartProducts({Key? key}) : super(key: key);
   List checkoutProducts = [];
   List totalCost = [];

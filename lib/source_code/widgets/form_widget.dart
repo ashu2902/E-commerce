@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:task_app/source_code/Models/form_field.dart';
+import 'package:task_app/source_code/controllers/cart_controller.dart';
 import 'package:task_app/source_code/widgets/submit_button.dart';
 
 class FormWidget extends StatefulWidget {
@@ -99,39 +102,21 @@ class _FormWidgetState extends State<FormWidget> {
                     onPressed: () {
                       validate();
                       if (validate() == true) {
-                        print('wuhooo');
                         _name = _nameController.text;
                         _email = _emailController.text;
                         _mobile = _mobileController.text;
                         _address = _addressController.text;
 
                         print(_name + _email + _mobile + _address);
-                        var uid =
-                            FirebaseAuth.instance.currentUser!.uid.toString();
-                        final CollectionReference user_info = FirebaseFirestore
-                            .instance
-                            .collection('users/$uid/info');
-                        user_info.add({
-                          "name": _name,
-                          "mob": _mobile,
-                          "email": _email,
-                          "address": _address
-                        }).then((_) => _formKey.currentState!.reset());
 
-                        showDialog(
-                            context: context,
-                            builder: (context) => Dialog(
-                                  child: Container(
-                                      height: 60,
-                                      width: 60,
-                                      child: Center(
-                                          child: Text('Order submitted'))),
-                                ));
+                        storeInfoToFirestore();
+                        openDialog();
                         _nameController.clear();
                         _mobileController.clear();
                         _emailController.clear();
                         _addressController.clear();
                         Navigator.pop(context);
+                        Get.delete<CartController>();
                       }
                     },
                     sidePadding: 60.0,
@@ -154,5 +139,29 @@ class _FormWidgetState extends State<FormWidget> {
       print('not validated');
       return false;
     }
+  }
+
+  storeInfoToFirestore() {
+    var uid = FirebaseAuth.instance.currentUser!.uid.toString();
+    final CollectionReference user_info =
+        FirebaseFirestore.instance.collection('users/$uid/info');
+    print('ye hai user id' + uid);
+    user_info.add({
+      "name": _name,
+      "mob": _mobile,
+      "email": _email,
+      "address": _address
+    }).then((_) => _formKey.currentState!.reset());
+  }
+
+  openDialog() {
+    showDialog(
+        context: context,
+        builder: (context) => Dialog(
+              child: Container(
+                  height: 60,
+                  width: 60,
+                  child: Center(child: Text('Order submitted'))),
+            ));
   }
 }

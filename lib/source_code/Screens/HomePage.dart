@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_app/source_code/Screens/cart_screen.dart';
 import 'package:task_app/source_code/Services/auth_service.dart';
 import 'package:task_app/source_code/controllers/cart_controller.dart';
-import 'package:task_app/source_code/widgets/cart_icon.dart';
 import 'package:task_app/source_code/widgets/product_list.dart';
 
 class HomePageView extends StatefulWidget {
@@ -26,6 +26,7 @@ class _HomePageViewState extends State<HomePageView> {
 
   @override
   Widget build(BuildContext context) {
+    List items = controller.products.values.toList();
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -37,7 +38,23 @@ class _HomePageViewState extends State<HomePageView> {
               );
             },
           ),
-          actions: [CartIcon()],
+          actions: [
+            Obx(
+              () => Container(
+                child: Stack(children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Cart()));
+                    },
+                    icon: const Icon(Icons.shopping_cart),
+                  ),
+                  //this icon will tell the number of products added.
+                  Text('${controller.products.values.toList().length}')
+                ]),
+              ),
+            ),
+          ],
         ),
         body: ProductList());
   }

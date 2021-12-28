@@ -24,7 +24,7 @@ class _CartIconState extends State<CartIcon> {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => Cart()));
             },
-            icon: const Icon(Icons.shopping_cart),
+            icon: Icon(Icons.shopping_cart),
           ),
           //this icon will tell the number of products added.
           Text('${controller.products.values.toList().length}')
